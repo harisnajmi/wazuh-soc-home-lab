@@ -30,7 +30,7 @@ A home lab built to practise L1 SOC work: standing up a SIEM, monitoring a Windo
 
 **MITRE ATT&CK:** Wazuh mapped this to T1531 (failures) and T1078 Valid Accounts (the success). This overlaps with the more commonly cited T1110 Brute Force for this kind of pattern.
 
-**Recommended action:** Confirm with the account owner that the failures and the eventual login were legitimate (forgotten password, mistyped attempts). If unconfirmed, treat the account as potentially compromised: revoke active session, disabled the account, force a password reset and review any activity under it since the successful logon.
+**Recommended action:** Confirm with the account owner that the failures and the eventual login were legitimate (forgotten password, mistyped attempts). If unconfirmed, treat the account as potentially compromised: revoke active session, disable the account, force a password reset and review any activity under it since the successful logon.
 
 ## Scenario 2: New administrator account and an encoded PowerShell command
 
@@ -69,7 +69,7 @@ A home lab built to practise L1 SOC work: standing up a SIEM, monitoring a Windo
 ## What I learned
 
 - Wazuh has its own rule-to-ATT&CK mappings(for example, T1531 and T1078 for a brute-force-then-success pattern, rather than T1110). Worth checking a SIEM's actual mappings.
-- Mid-lab, the Windows agent lost its connection to the manager and reconnected on its own after a few minutes. Troubleshooting it (checking `agent_control -l` on the manager, the agent's local `ossec.log`, and the indexer's document count directly via the API) was a good reminder that a SIEM pipeline has several moving parts(agent, manager, indexer, dashboard) and that an alert not showing up doesn't always mean the activity didn't happen or not recorded.
+- Mid-lab, the Windows agent lost its connection to the manager and reconnected on its own after a few minutes. Troubleshooting it (checking `agent_control -l` on the manager, the agent's local `ossec.log`, and the indexer's document count directly via the API) was a good reminder that a SIEM pipeline has several moving parts(agent, manager, indexer, dashboard) and that an alert not showing up doesn't always mean the activity didn't happen, it may just have not shown up yet on the dashboard.
 - It is always good to know where to locate and understand raw logs incase unexpected behaviour by SIEM especially in time-sensitive cases.
 
 ## Next steps
