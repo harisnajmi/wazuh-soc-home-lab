@@ -69,7 +69,7 @@ A home lab built to practise L1 SOC work: standing up a SIEM, monitoring a Windo
 ## What I learned
 
 - Wazuh has its own rule-to-ATT&CK mappings(for example, T1531 and T1078 for a brute-force-then-success pattern, rather than T1110). Worth checking a SIEM's actual mappings.
-- Mid-lab, the Windows agent lost its connection to the manager and reconnected on its own after a few minutes. Troubleshooting it (checking `agent_control -l` on the manager, the agent's local `ossec.log`, and the indexer's document count directly via the API) was a good reminder that a SIEM pipeline has several moving parts — agent, manager, indexer, dashboard — and that an alert not showing up doesn't always mean the activity didn't happen.
+- Mid-lab, the Windows agent lost its connection to the manager and reconnected on its own after a few minutes. Troubleshooting it (checking `agent_control -l` on the manager, the agent's local `ossec.log`, and the indexer's document count directly via the API) was a good reminder that a SIEM pipeline has several moving parts(agent, manager, indexer, dashboard) and that an alert not showing up doesn't always mean the activity didn't happen or not recorded.
 - It is always good to know where to locate and understand raw logs incase unexpected behaviour by SIEM especially in time-sensitive cases.
 
 ## Next steps
