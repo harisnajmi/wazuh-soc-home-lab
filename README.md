@@ -1,6 +1,6 @@
 # Wazuh SOC Home Lab
 
-A home lab built to practise L1 SOC work: standing up a SIEM, monitoring a Windows endpoint, simulating two common attack patterns, and triaging the resulting alerts.
+A home lab built to familiarize with Wazuh and practice standing up a SIEM, monitoring a Windows endpoint, simulating two common attack patterns, and triaging the resulting alerts.
 
 ## Architecture
 
