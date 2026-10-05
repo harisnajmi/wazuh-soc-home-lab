@@ -26,11 +26,11 @@ A home lab built to practise L1 SOC work: standing up a SIEM, monitoring a Windo
 ![Successful logon alert](screenshots/attack1-success.png)
 <!-- Screenshot of the 4624 event following the failures -->
 
-**Verdict:** True positive (simulated). A cluster of failures against one account, followed by a success, is a password-guessing pattern worth investigating further, even though here it was in a lab.
+**Verdict:** True positive (simulated). A cluster of failures against one account, followed by a success, is a password-guessing pattern worth investigating further.
 
 **MITRE ATT&CK:** Wazuh mapped this to T1531 (failures) and T1078 Valid Accounts (the success). This overlaps with the more commonly cited T1110 Brute Force for this kind of pattern.
 
-**Recommended action:** Confirm with the account owner that the failures and the eventual login were legitimate (forgotten password, mistyped attempts). If unconfirmed, treat the account as potentially compromised: force a password reset and review any activity under it since the successful logon.
+**Recommended action:** Confirm with the account owner that the failures and the eventual login were legitimate (forgotten password, mistyped attempts). If unconfirmed, treat the account as potentially compromised: revoke active session, disabled the account, force a password reset and review any activity under it since the successful logon.
 
 ## Scenario 2: New administrator account and an encoded PowerShell command
 
@@ -62,18 +62,16 @@ A home lab built to practise L1 SOC work: standing up a SIEM, monitoring a Windo
 
 | Scenario | Key indicators | Verdict | Escalate? | Recommended action | ATT&CK |
 |---|---|---|---|---|---|
-| Failed logons then success | 6× 4625 (14:28:32-14:28:41), 4624 (14:30:55), same account/host | True positive | Yes | Confirm with user; reset password if unconfirmed; review account activity | T1531 → T1078 |
+| Failed logons then success | 6× 4625 (14:28:32-14:28:41), 4624 (14:30:55), same account/host | True positive | Yes | Confirm with user; disable/revoke and reset password if unconfirmed; review account activity | T1531 → T1078 |
 | New admin account | 4720 + 4732 (14:49:05), account `labtest2` added to Administrators | True positive | Yes | Disable account if unauthorized; review who created it | T1098 / T1484 |
-| Encoded PowerShell | 4688, `-EncodedCommand` flag, decoded to a benign test string | True positive | Yes | Review what ran under the account; verify intent; check for further execution | T1059.001 |
+| Encoded PowerShell | 4688, `-EncodedCommand` flag, decoded to a test string | True positive | Yes | Review what ran under the account; verify intent; check for further execution | T1059.001 |
 
 ## What I learned
 
-- Wazuh's own rule-to-ATT&CK mappings don't always match the "textbook" technique I expected (for example, T1531 and T1078 for a brute-force-then-success pattern, rather than T1110). Worth checking a SIEM's actual mappings rather than assuming, since that's what you'd be reading from in a real shift.
+- Wazuh has its own rule-to-ATT&CK mappings(for example, T1531 and T1078 for a brute-force-then-success pattern, rather than T1110). Worth checking a SIEM's actual mappings.
 - Mid-lab, the Windows agent lost its connection to the manager and reconnected on its own after a few minutes. Troubleshooting it (checking `agent_control -l` on the manager, the agent's local `ossec.log`, and the indexer's document count directly via the API) was a good reminder that a SIEM pipeline has several moving parts — agent, manager, indexer, dashboard — and that an alert not showing up doesn't always mean the activity didn't happen.
 - It is always good to know where to locate and understand raw logs incase unexpected behaviour by SIEM especially in time-sensitive cases.
 
 ## Next steps
 
 - Build a script to correlate the failed-logon-then-success pattern automatically and produce a prioritised triage summary (in progress)
-- Extend detection coverage to the account-creation and encoded-command scenario
-- Add enrichment for any public indicators (IPs, file hashes) via VirusTotal where applicable
